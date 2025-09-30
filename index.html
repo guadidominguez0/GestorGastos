@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreador de Gastos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .header {
+            background: white;
+            padding: 48px 24px 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            padding: 8px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 24px;
+        }
+
+        .summary-cards {
+            display: flex;
+            gap: 12px;
+        }
+
+        .summary-card {
+            flex: 1;
+            padding: 16px;
+            border-radius: 16px;
+        }
+
+        .summary-card.income {
+            background: #f0fdf4;
+        }
+
+        .summary-card.expense {
+            background: #fef2f2;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .summary-label {
+            font-size: 12px;
+        }
+
+        .summary-card.income .summary-label {
+            color: #15803d;
+        }
+
+        .summary-card.expense .summary-label {
+            color: #b91c1c;
+        }
+
+        .summary-amount {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .summary-card.income .summary-amount {
+            color: #15803d;
+        }
+
+        .summary-card.expense .summary-amount {
+            color: #b91c1c;
+        }
+
+        .content {
+            padding: 24px 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+            padding: 0 8px;
+        }
+
+        .month-summary {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .month-summary-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+
+        .month-summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .stat-value.income {
+            color: #16a34a;
+        }
+
+        .stat-value.expense {
+            color: #dc2626;
+        }
+
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .transaction-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-category {
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .transaction-description {
+            font-size: 14px;
+            color: #6b7280;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .transaction-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .transaction-amount.income {
+            color: #16a34a;
+        }
+
+        .transaction-amount.expense {
+            color: #dc2626;
+        }
+
+        .action-btn {
+            padding: 8px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .action-btn.delete:hover {
+            background: #fef2f2;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 0;
+            color: #9ca3af;
+        }
+
+        .empty-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            opacity: 0.5;
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.05);
+        }
+
+        .fab.expense {
+            background: #ef4444;
+        }
+
+        .fab.income {
+            background: #22c55e;
+        }
+
+        .fab.history {
+            background: #8b5cf6;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 24px 24px 0 0;
+            width: 100%;
+            max-width: 512px;
+            padding: 24px;
+            animation: slideUp 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-handle {
+            width: 48px;
+            height: 4px;
+            background: #d1d5db;
+            border-radius: 2px;
+            margin: 0 auto 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus {
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-submit {
+            color: white;
+        }
+
+        .btn-submit.income {
+            background: #22c55e;
+        }
+
+        .btn-submit.income:hover {
+            background: #16a34a;
+        }
+
+        .btn-submit.expense {
+            background: #ef4444;
+        }
+
+        .btn-submit.expense:hover {
+            background: #dc2626;
+        }
+
+        .chart-modal {
+            align-items: center;
+            padding: 16px;
+        }
+
+        .chart-modal .modal {
+            border-radius: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        #chartContainer {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pie-chart {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .month-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .month-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .month-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .month-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .month-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Category colors */
+        .cat-comida { background: #f97316; }
+        .cat-transporte { background: #3b82f6; }
+        .cat-entretenimiento { background: #a855f7; }
+        .cat-salud { background: #ef4444; }
+        .cat-educacion { background: #22c55e; }
+        .cat-compras { background: #ec4899; }
+        .cat-servicios { background: #eab308; }
+        .cat-otros { background: #6b7280; }
+        .cat-ingreso { background: #22c55e; }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .balance-amount {
+                font-size: 32px;
+            }
+
+            .summary-amount {
+                font-size: 16px;
+            }
+
+            .month-summary-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .pie-chart {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-top">
+            <h1 class="header-title">Balance del Mes</h1>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="showChart()" title="Ver gráfico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="exportData()" title="Exportar datos">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                    </svg>
+                </button>
+                <label class="icon-btn" title="Importar datos" style="cursor: pointer;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                    </svg>
+                    <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+                </label>
+            </div>
+        </div>
+        <div class="balance-amount" id="balance">$0.00</div>
+        
+        <div class="summary-cards">
+            <div class="summary-card income">
+                <div class="summary-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                    <span class="summary-label">Ingresos</span>
+                </div>
+                <div class="summary-amount" id="totalIncome">$0.00</div>
+            </div>
+            
+            <div class="summary-card expense">
+                <div class="summary-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                        <polyline points="17 18 23 18 23 12"/>
+                    </svg>
+                    <span class="summary-label">Gastos</span>
+                </div>
+                <div class="summary-amount" id="totalExpenses">$0.00</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h2 class="section-title">Transacciones del Mes</h2>
+        <div class="transactions-list" id="transactionsList">
+            <div class="empty-state">
+                <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+                    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+                </svg>
+                <p>No hay transacciones aún</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FABs -->
+    <div class="fab-container">
+        <button class="fab history" onclick="showHistory()" title="Ver historial">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/>
+                <path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/>
+                <line x1="16" y1="13" x2="16" y2="17"/>
+                <line x1="8" y1="13" x2="8" y2="17"/>
+            </svg>
+        </button>
+        <button class="fab expense" onclick="openModal('expense')" title="Agregar gasto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                <polyline points="17 18 23 18 23 12"/>
+            </svg>
+        </button>
+        <button class="fab income" onclick="openModal('income')" title="Agregar ingreso">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                <polyline points="17 6 23 6 23 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div class="modal-overlay" id="transactionModal" onclick="closeModalOnOverlay(event, 'transactionModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-handle"></div>
+            <h3 class="modal-title" id="modalTitle">Nueva Transacción</h3>
+            
+            <div class="form-group">
+                <label class="form-label">Monto</label>
+                <input type="number" class="form-input" id="amountInput" placeholder="0.00" step="0.01">
+            </div>
+
+            <div class="form-group" id="categoryGroup">
+                <label class="form-label">Categoría</label>
+                <select class="form-select" id="categoryInput">
+                    <option value="Comida">Comida</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Entretenimiento">Entretenimiento</option>
+                    <option value="Salud">Salud</option>
+                    <option value="Educación">Educación</option>
+                    <option value="Compras">Compras</option>
+                    <option value="Servicios">Servicios</option>
+                    <option value="Otros">Otros</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Descripción</label>
+                <input type="text" class="form-input" id="descriptionInput" placeholder="Opcional">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-input" id="dateInput">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-submit" id="submitBtn" onclick="handleSubmit()">Agregar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Modal -->
+    <div class="modal-overlay chart-modal" id="chartModal" onclick="closeModalOnOverlay(event, 'chartModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="chart-header">
+                <h3 class="modal-title" style="margin: 0;">Gastos por Categoría</h3>
+                <button class="icon-btn" onclick="closeChartModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="chartContainer"></div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay chart-modal" id="historyModal" onclick="closeModalOnOverlay(event, 'historyModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="chart-header">
+                <h3 class="modal-title" style="margin: 0;">Historial de Meses</h3>
+                <button class="icon-btn" onclick="closeHistoryModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="historyContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        let monthlyData = {}; // { 'YYYY-MM': { transactions: [], balance: 0 } }
+        let editingId = null;
+        let editingMonth = null;
+        let modalType = 'expense';
+
+        const categories = {
+            'Comida': 'cat-comida',
+            'Transporte': 'cat-transporte',
+            'Entretenimiento': 'cat-entretenimiento',
+            'Salud': 'cat-salud',
+            'Educación': 'cat-educacion',
+            'Compras': 'cat-compras',
+            'Servicios': 'cat-servicios',
+            'Otros': 'cat-otros',
+            'Ingreso': 'cat-ingreso'
+        };
+
+        const categoryIcons = {
+            'Comida': '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2m7 0v20M9 6h8m-8 6h8"/>',
+            'Transporte': '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
+            'Entretenimiento': '<rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="7 2 12 7 17 2"/>',
+            'Salud': '<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/>',
+            'Educación': '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+            'Compras': '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+            'Servicios': '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+            'Otros': '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+            'Ingreso': '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>'
+        };
+
+        const chartColors = ['#f97316', '#3b82f6', '#a855f7', '#ef4444', '#22c55e', '#ec4899', '#eab308', '#6b7280'];
+
+        const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        // Load data on startup
+        window.onload = function() {
+            loadData();
+            updateUI();
+            document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+        };
+
+        function getMonthKeyFromDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function getCurrentMonthKey() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function getMonthData(monthKey) {
+            if (!monthlyData[monthKey]) {
+                monthlyData[monthKey] = {
+                    transactions: [],
+                    balance: 0
+                };
+            }
+            return monthlyData[monthKey];
+        }
+
+        function calculateMonthBalance(monthKey) {
+            const month = getMonthData(monthKey);
+            return month.transactions.reduce((sum, t) => {
+                return sum + (t.type === 'income' ? t.amount : -t.amount);
+            }, 0);
+        }
+
+        function getMonthStats(monthKey) {
+            const month = getMonthData(monthKey);
+            const totalIncome = month.transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const totalExpenses = month.transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            return { totalIncome, totalExpenses };
+        }
+
+        function loadData() {
+            const saved = sessionStorage.getItem('expenseData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                monthlyData = data.monthlyData || {};
+            }
+        }
+
+        function saveData() {
+            sessionStorage.setItem('expenseData', JSON.stringify({ monthlyData }));
+        }
+
+        function updateUI() {
+            const currentMonth = getCurrentMonthKey();
+            const month = getMonthData(currentMonth);
+            const balance = calculateMonthBalance(currentMonth);
+            
+            // Update balance
+            document.getElementById('balance').textContent = `$${balance.toFixed(2)}`;
+
+            // Calculate totals
+            const { totalIncome, totalExpenses } = getMonthStats(currentMonth);
+
+            document.getElementById('totalIncome').textContent = `$${totalIncome.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
+
+            // Update transactions list
+            const list = document.getElementById('transactionsList');
+            
+            if (month.transactions.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+                            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+                        </svg>
+                        <p>No hay transacciones aún</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = month.transactions.map(t => {
+                    const catClass = categories[t.category] || 'cat-otros';
+                    const icon = categoryIcons[t.category] || categoryIcons['Otros'];
+                    const date = new Date(t.date).toLocaleDateString('es-ES', { 
+                        day: '2-digit', 
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    
+                    return `
+                        <div class="transaction-card">
+                            <div class="transaction-icon ${catClass}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    ${icon}
+                                </svg>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-category">${t.category}</div>
+                                ${t.description ? `<div class="transaction-description">${t.description}</div>` : ''}
+                                <div class="transaction-date">${date}</div>
+                            </div>
+                            <div class="transaction-actions">
+                                <div class="transaction-amount ${t.type}">
+                                    ${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                                </div>
+                                <button class="action-btn" onclick="editTransaction('${currentMonth}', ${t.id})">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteTransaction('${currentMonth}', ${t.id})">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function openModal(type) {
+            modalType = type;
+            editingId = null;
+            editingMonth = null;
+            document.getElementById('modalTitle').textContent = type === 'income' ? 'Nuevo Ingreso' : 'Nuevo Gasto';
+            document.getElementById('categoryGroup').style.display = type === 'expense' ? 'block' : 'none';
+            document.getElementById('submitBtn').className = `btn btn-submit ${type}`;
+            document.getElementById('submitBtn').textContent = 'Agregar';
+            
+            document.getElementById('amountInput').value = '';
+            document.getElementById('categoryInput').value = 'Comida';
+            document.getElementById('descriptionInput').value = '';
+            document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
+            
+            document.getElementById('transactionModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('transactionModal').classList.remove('active');
+            editingId = null;
+            editingMonth = null;
+        }
+
+        function closeModalOnOverlay(event, modalId) {
+            if (event.target.id === modalId) {
+                document.getElementById(modalId).classList.remove('active');
+                editingId = null;
+                editingMonth = null;
+            }
+        }
+
+        function editTransaction(monthKey, id) {
+            const month = getMonthData(monthKey);
+            const transaction = month.transactions.find(t => t.id === id);
+            if (!transaction) return;
+
+            editingId = id;
+            editingMonth = monthKey;
+            modalType = transaction.type;
+            
+            document.getElementById('modalTitle').textContent = 'Editar Transacción';
+            document.getElementById('categoryGroup').style.display = transaction.type === 'expense' ? 'block' : 'none';
+            document.getElementById('submitBtn').className = `btn btn-submit ${transaction.type}`;
+            document.getElementById('submitBtn').textContent = 'Guardar';
+            
+            document.getElementById('amountInput').value = transaction.amount;
+            document.getElementById('categoryInput').value = transaction.category;
+            document.getElementById('descriptionInput').value = transaction.description;
+            document.getElementById('dateInput').value = transaction.date;
+            
+            document.getElementById('transactionModal').classList.add('active');
+        }
+
+        function deleteTransaction(monthKey, id) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta transacción?')) {
+                const month = getMonthData(monthKey);
+                month.transactions = month.transactions.filter(t => t.id !== id);
+                month.balance = calculateMonthBalance(monthKey);
+                saveData();
+                updateUI();
+            }
+        }
+
+        function handleSubmit() {
+            const amount = parseFloat(document.getElementById('amountInput').value);
+            
+            if (!amount || amount <= 0) {
+                alert('Por favor ingresa un monto válido');
+                return;
+            }
+
+            const category = modalType === 'income' ? 'Ingreso' : document.getElementById('categoryInput').value;
+            const description = document.getElementById('descriptionInput').value;
+            const date = document.getElementById('dateInput').value;
+
+            // Determinar a qué mes pertenece la transacción
+            const targetMonthKey = getMonthKeyFromDate(date);
+            const targetMonth = getMonthData(targetMonthKey);
+
+            if (editingId) {
+                // Si estamos editando, primero eliminamos de su mes original
+                const oldMonth = getMonthData(editingMonth);
+                oldMonth.transactions = oldMonth.transactions.filter(t => t.id !== editingId);
+                
+                // Si la fecha cambió a otro mes, agregamos a ese mes
+                const updatedTransaction = {
+                    id: editingId,
+                    type: modalType,
+                    amount,
+                    category,
+                    description,
+                    date
+                };
+                targetMonth.transactions.unshift(updatedTransaction);
+                
+                // Recalcular balances de ambos meses
+                if (editingMonth !== targetMonthKey) {
+                    oldMonth.balance = calculateMonthBalance(editingMonth);
+                }
+                targetMonth.balance = calculateMonthBalance(targetMonthKey);
+            } else {
+                // Nueva transacción
+                const newTransaction = {
+                    id: Date.now(),
+                    type: modalType,
+                    amount,
+                    category,
+                    description,
+                    date
+                };
+                targetMonth.transactions.unshift(newTransaction);
+                targetMonth.balance = calculateMonthBalance(targetMonthKey);
+            }
+
+            saveData();
+            updateUI();
+            closeModal();
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify({ monthlyData }, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `gastos_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        monthlyData = data.monthlyData || {};
+                        saveData();
+                        updateUI();
+                        alert('Datos importados exitosamente');
+                    } catch (error) {
+                        alert('Error al importar el archivo');
+                    }
+                };
+                reader.readAsText(file);
+            }
+            event.target.value = '';
+        }
+
+        function showChart() {
+            const currentMonth = getCurrentMonthKey();
+            const month = getMonthData(currentMonth);
+            
+            const expensesByCategory = month.transactions
+                .filter(t => t.type === 'expense')
+                .reduce((acc, t) => {
+                    acc[t.category] = (acc[t.category] || 0) + t.amount;
+                    return acc;
+                }, {});
+
+            const chartData = Object.entries(expensesByCategory).map(([name, value]) => ({
+                name,
+                value
+            }));
+
+            const container = document.getElementById('chartContainer');
+            
+            if (chartData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                        </svg>
+                        <p>No hay gastos para mostrar</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '<canvas id="pieCanvas" width="300" height="300"></canvas>';
+                drawPieChart(chartData);
+            }
+
+            document.getElementById('chartModal').classList.add('active');
+        }
+
+        function drawPieChart(data) {
+            const canvas = document.getElementById('pieCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 120;
+
+            const total = data.reduce((sum, item) => sum + item.value, 0);
+            let currentAngle = -Math.PI / 2;
+
+            // Draw pie slices
+            data.forEach((item, index) => {
+                const sliceAngle = (item.value / total) * 2 * Math.PI;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fillStyle = chartColors[index % chartColors.length];
+                ctx.fill();
+                
+                currentAngle += sliceAngle;
+            });
+
+            // Draw legend
+            let legendY = 20;
+            data.forEach((item, index) => {
+                const percentage = ((item.value / total) * 100).toFixed(1);
+                
+                // Color box
+                ctx.fillStyle = chartColors[index % chartColors.length];
+                ctx.fillRect(canvas.width - 150, legendY, 15, 15);
+                
+                // Text
+                ctx.fillStyle = '#374151';
+                ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText(`${item.name}: ${item.value.toFixed(2)} (${percentage}%)`, canvas.width - 130, legendY + 12);
+                
+                legendY += 25;
+            });
+        }
+
+        function closeChartModal() {
+            document.getElementById('chartModal').classList.remove('active');
+        }
+
+        function showHistory() {
+            const container = document.getElementById('historyContainer');
+            
+            // Obtener todos los meses ordenados de más reciente a más antiguo
+            const sortedMonths = Object.keys(monthlyData).sort().reverse();
+            
+            if (sortedMonths.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/>
+                            <path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                        <p>No hay historial de meses</p>
+                    </div>
+                `;
+            } else {
+                const currentMonthKey = getCurrentMonthKey();
+                
+                container.innerHTML = sortedMonths.map(monthKey => {
+                    const month = monthlyData[monthKey];
+                    const [year, monthNum] = monthKey.split('-');
+                    const monthName = monthNames[parseInt(monthNum) - 1];
+                    const monthDisplay = `${monthName} ${year}`;
+                    const isCurrent = monthKey === currentMonthKey;
+                    
+                    const { totalIncome, totalExpenses } = getMonthStats(monthKey);
+                    const balance = calculateMonthBalance(monthKey);
+                    
+                    return `
+                        <div class="month-card" onclick="showMonthDetails('${monthKey}')">
+                            <div class="month-card-header">
+                                <div class="month-name">${monthDisplay} ${isCurrent ? '(Actual)' : ''}</div>
+                                <div class="stat-value">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</div>
+                            </div>
+                            <div class="month-stats">
+                                <div class="stat-box">
+                                    <div class="stat-label">Ingresos</div>
+                                    <div class="stat-value income">${totalIncome.toFixed(2)}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Gastos</div>
+                                    <div class="stat-value expense">${totalExpenses.toFixed(2)}</div>
+                                </div>
+                                <div class="stat-box">
+                                    <div class="stat-label">Transacciones</div>
+                                    <div class="stat-value">${month.transactions.length}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('historyModal').classList.add('active');
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.remove('active');
+        }
+
+        function showMonthDetails(monthKey) {
+            const month = getMonthData(monthKey);
+            const [year, monthNum] = monthKey.split('-');
+            const monthName = monthNames[parseInt(monthNum) - 1];
+            const monthDisplay = `${monthName} ${year}`;
+
+            const container = document.getElementById('historyContainer');
+            
+            const { totalIncome, totalExpenses } = getMonthStats(monthKey);
+            const balance = calculateMonthBalance(monthKey);
+
+            let html = `
+                <button class="btn btn-cancel" onclick="showHistory()" style="margin-bottom: 20px; width: 100%;">
+                    ← Volver al historial
+                </button>
+                <div class="month-summary">
+                    <div class="month-summary-title">${monthDisplay}</div>
+                    <div class="month-summary-stats">
+                        <div class="stat-box">
+                            <div class="stat-label">Balance</div>
+                            <div class="stat-value">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Ingresos</div>
+                            <div class="stat-value income">${totalIncome.toFixed(2)}</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Gastos</div>
+                            <div class="stat-value expense">${totalExpenses.toFixed(2)}</div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="section-title">Transacciones de ${monthDisplay}</h3>
+            `;
+
+            html += '<div class="transactions-list">';
+            
+            if (month.transactions.length === 0) {
+                html += `
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+                            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+                        </svg>
+                        <p>No hay transacciones en este mes</p>
+                    </div>
+                `;
+            } else {
+                month.transactions.forEach(t => {
+                    const catClass = categories[t.category] || 'cat-otros';
+                    const icon = categoryIcons[t.category] || categoryIcons['Otros'];
+                    const date = new Date(t.date).toLocaleDateString('es-ES', { 
+                        day: '2-digit', 
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    
+                    html += `
+                        <div class="transaction-card">
+                            <div class="transaction-icon ${catClass}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    ${icon}
+                                </svg>
+                            </div>
+                            <div class="transaction-info">
+                                <div class="transaction-category">${t.category}</div>
+                                ${t.description ? `<div class="transaction-description">${t.description}</div>` : ''}
+                                <div class="transaction-date">${date}</div>
+                            </div>
+                            <div class="transaction-actions">
+                                <div class="transaction-amount ${t.type}">
+                                    ${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
+                                </div>
+                                <button class="action-btn" onclick="editTransaction('${monthKey}', ${t.id})">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteTransaction('${monthKey}', ${t.id})">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += '</div>';
+
+            container.innerHTML = html;
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeChartModal();
+                closeHistoryModal();
+            }
+        });
+    </script>
+</body>
+</html>
