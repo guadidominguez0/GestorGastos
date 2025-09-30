@@ -125,54 +125,6 @@
             padding: 0 8px;
         }
 
-        .month-summary {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .month-summary-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 16px;
-        }
-
-        .month-summary-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 12px;
-            background: #f9fafb;
-            border-radius: 12px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #6b7280;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #111827;
-        }
-
-        .stat-value.income {
-            color: #16a34a;
-        }
-
-        .stat-value.expense {
-            color: #dc2626;
-        }
-
         .transactions-list {
             display: flex;
             flex-direction: column;
@@ -313,14 +265,19 @@
             background: #8b5cf6;
         }
 
+        .fab.categories {
+            background: #f59e0b;
+        }
+
         .modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.5);
             display: none;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
             z-index: 1000;
+            padding: 16px;
         }
 
         .modal-overlay.active {
@@ -329,30 +286,13 @@
 
         .modal {
             background: white;
-            border-radius: 24px 24px 0 0;
+            border-radius: 24px;
             width: 100%;
-            max-width: 512px;
-            padding: 24px;
-            animation: slideUp 0.3s ease-out;
-            max-height: 90vh;
+            max-width: 500px;
+            max-height: 85vh;
             overflow-y: auto;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .modal-handle {
-            width: 48px;
-            height: 4px;
-            background: #d1d5db;
-            border-radius: 2px;
-            margin: 0 auto 24px;
+            padding: 24px;
+            position: relative;
         }
 
         .modal-title {
@@ -378,15 +318,16 @@
             width: 100%;
             padding: 12px 16px;
             background: #f9fafb;
-            border: none;
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
             font-size: 16px;
             outline: none;
-            transition: box-shadow 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .form-input:focus, .form-select:focus {
-            box-shadow: 0 0 0 2px #3b82f6;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .modal-actions {
@@ -403,6 +344,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.2s;
+            font-size: 16px;
         }
 
         .btn-cancel {
@@ -434,15 +376,6 @@
             background: #dc2626;
         }
 
-        .chart-modal {
-            align-items: center;
-            padding: 16px;
-        }
-
-        .chart-modal .modal {
-            border-radius: 24px;
-        }
-
         .chart-header {
             display: flex;
             justify-content: space-between;
@@ -456,12 +389,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .pie-chart {
-            position: relative;
-            width: 300px;
-            height: 300px;
         }
 
         .month-card {
@@ -498,20 +425,92 @@
             gap: 12px;
         }
 
+        .stat-box {
+            text-align: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .stat-value.income {
+            color: #16a34a;
+        }
+
+        .stat-value.expense {
+            color: #dc2626;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .color-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .color-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #111827;
+            transform: scale(1.1);
+        }
+
         .hidden {
             display: none !important;
         }
-
-        /* Category colors */
-        .cat-comida { background: #f97316; }
-        .cat-transporte { background: #3b82f6; }
-        .cat-entretenimiento { background: #a855f7; }
-        .cat-salud { background: #ef4444; }
-        .cat-educacion { background: #22c55e; }
-        .cat-compras { background: #ec4899; }
-        .cat-servicios { background: #eab308; }
-        .cat-otros { background: #6b7280; }
-        .cat-ingreso { background: #22c55e; }
 
         svg {
             width: 20px;
@@ -527,13 +526,12 @@
                 font-size: 16px;
             }
 
-            .month-summary-stats {
+            .month-stats {
                 grid-template-columns: 1fr;
             }
 
-            .pie-chart {
-                width: 250px;
-                height: 250px;
+            .modal {
+                max-height: 90vh;
             }
         }
     </style>
@@ -605,6 +603,14 @@
 
     <!-- FABs -->
     <div class="fab-container">
+        <button class="fab categories" onclick="showCategories()" title="Gestionar categorías">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+        </button>
         <button class="fab history" onclick="showHistory()" title="Ver historial">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/>
@@ -630,7 +636,6 @@
     <!-- Transaction Modal -->
     <div class="modal-overlay" id="transactionModal">
         <div class="modal">
-            <div class="modal-handle"></div>
             <h3 class="modal-title" id="modalTitle">Nueva Transacción</h3>
             
             <div class="form-group">
@@ -641,14 +646,6 @@
             <div class="form-group" id="categoryGroup">
                 <label class="form-label">Categoría</label>
                 <select class="form-select" id="categoryInput">
-                    <option value="Comida">Comida</option>
-                    <option value="Transporte">Transporte</option>
-                    <option value="Entretenimiento">Entretenimiento</option>
-                    <option value="Salud">Salud</option>
-                    <option value="Educación">Educación</option>
-                    <option value="Compras">Compras</option>
-                    <option value="Servicios">Servicios</option>
-                    <option value="Otros">Otros</option>
                 </select>
             </div>
 
@@ -670,7 +667,7 @@
     </div>
 
     <!-- Chart Modal -->
-    <div class="modal-overlay chart-modal" id="chartModal">
+    <div class="modal-overlay" id="chartModal">
         <div class="modal">
             <div class="chart-header">
                 <h3 class="modal-title" style="margin: 0;">Gastos por Categoría</h3>
@@ -686,7 +683,7 @@
     </div>
 
     <!-- History Modal -->
-    <div class="modal-overlay chart-modal" id="historyModal">
+    <div class="modal-overlay" id="historyModal">
         <div class="modal">
             <div class="chart-header">
                 <h3 class="modal-title" style="margin: 0;">Historial de Meses</h3>
@@ -701,47 +698,80 @@
         </div>
     </div>
 
+    <!-- Categories Modal -->
+    <div class="modal-overlay" id="categoriesModal">
+        <div class="modal">
+            <div class="chart-header">
+                <h3 class="modal-title" style="margin: 0;">Gestionar Categorías</h3>
+                <button class="icon-btn" onclick="closeCategoriesModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="categoriesList"></div>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Agregar Nueva Categoría</h4>
+                
+                <div class="form-group">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-input" id="newCategoryName" placeholder="Ej: Gimnasio">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Color</label>
+                    <div class="color-picker-grid" id="colorPicker"></div>
+                </div>
+                
+                <button class="btn btn-submit expense" onclick="addNewCategory()" style="width: 100%;">
+                    Agregar Categoría
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        let monthlyData = {}; // { 'YYYY-MM': { transactions: [], balance: 0 } }
+        let monthlyData = {};
         let editingId = null;
         let editingMonth = null;
         let modalType = 'expense';
+        let customCategories = [];
+        let selectedColor = '#3b82f6';
 
-        const categories = {
-            'Comida': 'cat-comida',
-            'Transporte': 'cat-transporte',
-            'Entretenimiento': 'cat-entretenimiento',
-            'Salud': 'cat-salud',
-            'Educación': 'cat-educacion',
-            'Compras': 'cat-compras',
-            'Servicios': 'cat-servicios',
-            'Otros': 'cat-otros',
-            'Ingreso': 'cat-ingreso'
-        };
+        const defaultCategories = [
+            { name: 'Comida', color: '#f97316', icon: '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2m7 0v20M9 6h8m-8 6h8"/>' },
+            { name: 'Transporte', color: '#3b82f6', icon: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>' },
+            { name: 'Entretenimiento', color: '#a855f7', icon: '<rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="7 2 12 7 17 2"/>' },
+            { name: 'Salud', color: '#ef4444', icon: '<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/>' },
+            { name: 'Educación', color: '#22c55e', icon: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>' },
+            { name: 'Compras', color: '#ec4899', icon: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>' },
+            { name: 'Servicios', color: '#eab308', icon: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>' },
+            { name: 'Otros', color: '#6b7280', icon: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>' }
+        ];
 
-        const categoryIcons = {
-            'Comida': '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2m7 0v20M9 6h8m-8 6h8"/>',
-            'Transporte': '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
-            'Entretenimiento': '<rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="7 2 12 7 17 2"/>',
-            'Salud': '<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/>',
-            'Educación': '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
-            'Compras': '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
-            'Servicios': '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
-            'Otros': '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
-            'Ingreso': '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>'
-        };
-
-        const chartColors = ['#f97316', '#3b82f6', '#a855f7', '#ef4444', '#22c55e', '#ec4899', '#eab308', '#6b7280'];
+        const availableColors = [
+            '#f97316', '#3b82f6', '#a855f7', '#ef4444', 
+            '#22c55e', '#ec4899', '#eab308', '#6b7280',
+            '#14b8a6', '#f59e0b', '#8b5cf6', '#06b6d4',
+            '#84cc16', '#f43f5e', '#10b981', '#6366f1'
+        ];
 
         const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
                            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-        // Load data on startup
         window.onload = function() {
             loadData();
             updateUI();
+            updateCategorySelect();
             document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
         };
+
+        function getAllCategories() {
+            return [...defaultCategories, ...customCategories];
+        }
 
         function getMonthKeyFromDate(dateString) {
             const date = new Date(dateString);
@@ -784,15 +814,32 @@
         }
 
         function loadData() {
-            const saved = sessionStorage.getItem('expenseData');
+            const saved = localStorage.getItem('expenseData');
             if (saved) {
                 const data = JSON.parse(saved);
                 monthlyData = data.monthlyData || {};
+                customCategories = data.customCategories || [];
             }
         }
 
         function saveData() {
-            sessionStorage.setItem('expenseData', JSON.stringify({ monthlyData }));
+            localStorage.setItem('expenseData', JSON.stringify({ 
+                monthlyData,
+                customCategories 
+            }));
+        }
+
+        function updateCategorySelect() {
+            const select = document.getElementById('categoryInput');
+            const categories = getAllCategories();
+            select.innerHTML = categories.map(cat => 
+                `<option value="${cat.name}">${cat.name}</option>`
+            ).join('');
+        }
+
+        function getCategoryData(categoryName) {
+            const categories = getAllCategories();
+            return categories.find(c => c.name === categoryName) || defaultCategories[7];
         }
 
         function updateUI() {
@@ -800,16 +847,13 @@
             const month = getMonthData(currentMonth);
             const balance = calculateMonthBalance(currentMonth);
             
-            // Update balance
-            document.getElementById('balance').textContent = `$${balance.toFixed(2)}`;
+            document.getElementById('balance').textContent = `${balance.toFixed(2)}`;
 
-            // Calculate totals
             const { totalIncome, totalExpenses } = getMonthStats(currentMonth);
 
-            document.getElementById('totalIncome').textContent = `$${totalIncome.toFixed(2)}`;
-            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
+            document.getElementById('totalIncome').textContent = `${totalIncome.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `${totalExpenses.toFixed(2)}`;
 
-            // Update transactions list
             const list = document.getElementById('transactionsList');
             
             if (month.transactions.length === 0) {
@@ -823,9 +867,13 @@
                     </div>
                 `;
             } else {
-                list.innerHTML = month.transactions.map(t => {
-                    const catClass = categories[t.category] || 'cat-otros';
-                    const icon = categoryIcons[t.category] || categoryIcons['Otros'];
+                // Ordenar transacciones por fecha (más reciente primero)
+                const sortedTransactions = [...month.transactions].sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+                list.innerHTML = sortedTransactions.map(t => {
+                    const catData = getCategoryData(t.category);
                     const date = new Date(t.date).toLocaleDateString('es-ES', { 
                         day: '2-digit', 
                         month: 'short',
@@ -834,9 +882,9 @@
                     
                     return `
                         <div class="transaction-card">
-                            <div class="transaction-icon ${catClass}">
+                            <div class="transaction-icon" style="background: ${catData.color}">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    ${icon}
+                                    ${catData.icon}
                                 </svg>
                             </div>
                             <div class="transaction-info">
@@ -871,13 +919,14 @@
             modalType = type;
             editingId = null;
             editingMonth = null;
+            updateCategorySelect();
             document.getElementById('modalTitle').textContent = type === 'income' ? 'Nuevo Ingreso' : 'Nuevo Gasto';
             document.getElementById('categoryGroup').style.display = type === 'expense' ? 'block' : 'none';
             document.getElementById('submitBtn').className = `btn btn-submit ${type}`;
             document.getElementById('submitBtn').textContent = 'Agregar';
             
             document.getElementById('amountInput').value = '';
-            document.getElementById('categoryInput').value = 'Comida';
+            document.getElementById('categoryInput').value = getAllCategories()[0].name;
             document.getElementById('descriptionInput').value = '';
             document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
             
@@ -899,6 +948,7 @@
             editingMonth = monthKey;
             modalType = transaction.type;
             
+            updateCategorySelect();
             document.getElementById('modalTitle').textContent = 'Editar Transacción';
             document.getElementById('categoryGroup').style.display = transaction.type === 'expense' ? 'block' : 'none';
             document.getElementById('submitBtn').className = `btn btn-submit ${transaction.type}`;
@@ -934,16 +984,13 @@
             const description = document.getElementById('descriptionInput').value;
             const date = document.getElementById('dateInput').value;
 
-            // Determinar a qué mes pertenece la transacción
             const targetMonthKey = getMonthKeyFromDate(date);
             const targetMonth = getMonthData(targetMonthKey);
 
             if (editingId) {
-                // Si estamos editando, primero eliminamos de su mes original
                 const oldMonth = getMonthData(editingMonth);
                 oldMonth.transactions = oldMonth.transactions.filter(t => t.id !== editingId);
                 
-                // Si la fecha cambió a otro mes, agregamos a ese mes
                 const updatedTransaction = {
                     id: editingId,
                     type: modalType,
@@ -952,15 +999,13 @@
                     description,
                     date
                 };
-                targetMonth.transactions.unshift(updatedTransaction);
+                targetMonth.transactions.push(updatedTransaction);
                 
-                // Recalcular balances de ambos meses
                 if (editingMonth !== targetMonthKey) {
                     oldMonth.balance = calculateMonthBalance(editingMonth);
                 }
                 targetMonth.balance = calculateMonthBalance(targetMonthKey);
             } else {
-                // Nueva transacción
                 const newTransaction = {
                     id: Date.now(),
                     type: modalType,
@@ -969,7 +1014,7 @@
                     description,
                     date
                 };
-                targetMonth.transactions.unshift(newTransaction);
+                targetMonth.transactions.push(newTransaction);
                 targetMonth.balance = calculateMonthBalance(targetMonthKey);
             }
 
@@ -979,7 +1024,7 @@
         }
 
         function exportData() {
-            const dataStr = JSON.stringify({ monthlyData }, null, 2);
+            const dataStr = JSON.stringify({ monthlyData, customCategories }, null, 2);
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(dataBlob);
             const link = document.createElement('a');
@@ -997,8 +1042,10 @@
                     try {
                         const data = JSON.parse(e.target.result);
                         monthlyData = data.monthlyData || {};
+                        customCategories = data.customCategories || [];
                         saveData();
                         updateUI();
+                        updateCategorySelect();
                         alert('Datos importados exitosamente');
                     } catch (error) {
                         alert('Error al importar el archivo');
@@ -1022,7 +1069,8 @@
 
             const chartData = Object.entries(expensesByCategory).map(([name, value]) => ({
                 name,
-                value
+                value,
+                color: getCategoryData(name).color
             }));
 
             const container = document.getElementById('chartContainer');
@@ -1054,7 +1102,6 @@
             const total = data.reduce((sum, item) => sum + item.value, 0);
             let currentAngle = -Math.PI / 2;
 
-            // Draw pie slices
             data.forEach((item, index) => {
                 const sliceAngle = (item.value / total) * 2 * Math.PI;
                 
@@ -1062,22 +1109,19 @@
                 ctx.moveTo(centerX, centerY);
                 ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
                 ctx.closePath();
-                ctx.fillStyle = chartColors[index % chartColors.length];
+                ctx.fillStyle = item.color;
                 ctx.fill();
                 
                 currentAngle += sliceAngle;
             });
 
-            // Draw legend
             let legendY = 20;
             data.forEach((item, index) => {
                 const percentage = ((item.value / total) * 100).toFixed(1);
                 
-                // Color box
-                ctx.fillStyle = chartColors[index % chartColors.length];
+                ctx.fillStyle = item.color;
                 ctx.fillRect(canvas.width - 150, legendY, 15, 15);
                 
-                // Text
                 ctx.fillStyle = '#374151';
                 ctx.font = '12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
                 ctx.fillText(`${item.name}: ${item.value.toFixed(2)} (${percentage}%)`, canvas.width - 130, legendY + 12);
@@ -1092,8 +1136,6 @@
 
         function showHistory() {
             const container = document.getElementById('historyContainer');
-            
-            // Obtener todos los meses ordenados de más reciente a más antiguo
             const sortedMonths = Object.keys(monthlyData).sort().reverse();
             
             if (sortedMonths.length === 0) {
@@ -1166,9 +1208,9 @@
                 <button class="btn btn-cancel" onclick="showHistory()" style="margin-bottom: 20px; width: 100%;">
                     ← Volver al historial
                 </button>
-                <div class="month-summary">
-                    <div class="month-summary-title">${monthDisplay}</div>
-                    <div class="month-summary-stats">
+                <div style="background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    <div style="font-size: 16px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">${monthDisplay}</div>
+                    <div class="month-stats">
                         <div class="stat-box">
                             <div class="stat-label">Balance</div>
                             <div class="stat-value">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</div>
@@ -1183,7 +1225,7 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="section-title">Transacciones de ${monthDisplay}</h3>
+                <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px; padding: 0 8px;">Transacciones de ${monthDisplay}</h3>
             `;
 
             html += '<div class="transactions-list">';
@@ -1199,9 +1241,12 @@
                     </div>
                 `;
             } else {
-                month.transactions.forEach(t => {
-                    const catClass = categories[t.category] || 'cat-otros';
-                    const icon = categoryIcons[t.category] || categoryIcons['Otros'];
+                const sortedTransactions = [...month.transactions].sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+                sortedTransactions.forEach(t => {
+                    const catData = getCategoryData(t.category);
                     const date = new Date(t.date).toLocaleDateString('es-ES', { 
                         day: '2-digit', 
                         month: 'short',
@@ -1210,9 +1255,9 @@
                     
                     html += `
                         <div class="transaction-card">
-                            <div class="transaction-icon ${catClass}">
+                            <div class="transaction-icon" style="background: ${catData.color}">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    ${icon}
+                                    ${catData.icon}
                                 </svg>
                             </div>
                             <div class="transaction-info">
@@ -1243,16 +1288,110 @@
             }
             
             html += '</div>';
-
             container.innerHTML = html;
         }
 
-        // Keyboard shortcuts
+        function showCategories() {
+            renderCategoriesList();
+            renderColorPicker();
+            document.getElementById('categoriesModal').classList.add('active');
+        }
+
+        function closeCategoriesModal() {
+            document.getElementById('categoriesModal').classList.remove('active');
+        }
+
+        function renderCategoriesList() {
+            const container = document.getElementById('categoriesList');
+            const categories = getAllCategories();
+            
+            container.innerHTML = categories.map((cat, index) => {
+                const isDefault = index < defaultCategories.length;
+                return `
+                    <div class="category-item">
+                        <div class="category-info">
+                            <div class="category-color" style="background: ${cat.color}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    ${cat.icon}
+                                </svg>
+                            </div>
+                            <div class="category-name">${cat.name}</div>
+                        </div>
+                        ${!isDefault ? `
+                            <button class="action-btn delete" onclick="deleteCategory(${index - defaultCategories.length})">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderColorPicker() {
+            const container = document.getElementById('colorPicker');
+            container.innerHTML = availableColors.map(color => `
+                <div class="color-option ${color === selectedColor ? 'selected' : ''}" 
+                     style="background: ${color}" 
+                     onclick="selectColor('${color}')">
+                </div>
+            `).join('');
+        }
+
+        function selectColor(color) {
+            selectedColor = color;
+            renderColorPicker();
+        }
+
+        function addNewCategory() {
+            const name = document.getElementById('newCategoryName').value.trim();
+            
+            if (!name) {
+                alert('Por favor ingresa un nombre para la categoría');
+                return;
+            }
+
+            const allCategories = getAllCategories();
+            if (allCategories.some(cat => cat.name.toLowerCase() === name.toLowerCase())) {
+                alert('Ya existe una categoría con ese nombre');
+                return;
+            }
+
+            const newCategory = {
+                name: name,
+                color: selectedColor,
+                icon: '<circle cx="12" cy="12" r="10"/>'
+            };
+
+            customCategories.push(newCategory);
+            saveData();
+            updateCategorySelect();
+            renderCategoriesList();
+            
+            document.getElementById('newCategoryName').value = '';
+            selectedColor = '#3b82f6';
+            renderColorPicker();
+            
+            alert('Categoría agregada exitosamente');
+        }
+
+        function deleteCategory(index) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta categoría?')) {
+                customCategories.splice(index, 1);
+                saveData();
+                updateCategorySelect();
+                renderCategoriesList();
+            }
+        }
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal();
                 closeChartModal();
                 closeHistoryModal();
+                closeCategoriesModal();
             }
         });
     </script>
