@@ -628,8 +628,8 @@
     </div>
 
     <!-- Transaction Modal -->
-    <div class="modal-overlay" id="transactionModal" onclick="closeModalOnOverlay(event, 'transactionModal')">
-        <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-overlay" id="transactionModal">
+        <div class="modal">
             <div class="modal-handle"></div>
             <h3 class="modal-title" id="modalTitle">Nueva Transacción</h3>
             
@@ -670,8 +670,8 @@
     </div>
 
     <!-- Chart Modal -->
-    <div class="modal-overlay chart-modal" id="chartModal" onclick="closeModalOnOverlay(event, 'chartModal')">
-        <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-overlay chart-modal" id="chartModal">
+        <div class="modal">
             <div class="chart-header">
                 <h3 class="modal-title" style="margin: 0;">Gastos por Categoría</h3>
                 <button class="icon-btn" onclick="closeChartModal()">
@@ -686,8 +686,8 @@
     </div>
 
     <!-- History Modal -->
-    <div class="modal-overlay chart-modal" id="historyModal" onclick="closeModalOnOverlay(event, 'historyModal')">
-        <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-overlay chart-modal" id="historyModal">
+        <div class="modal">
             <div class="chart-header">
                 <h3 class="modal-title" style="margin: 0;">Historial de Meses</h3>
                 <button class="icon-btn" onclick="closeHistoryModal()">
@@ -888,14 +888,6 @@
             document.getElementById('transactionModal').classList.remove('active');
             editingId = null;
             editingMonth = null;
-        }
-
-        function closeModalOnOverlay(event, modalId) {
-            if (event.target.id === modalId) {
-                document.getElementById(modalId).classList.remove('active');
-                editingId = null;
-                editingMonth = null;
-            }
         }
 
         function editTransaction(monthKey, id) {
