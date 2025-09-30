@@ -323,11 +323,23 @@
             font-size: 16px;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .form-input:focus, .form-select:focus {
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 12px;
+            padding-right: 40px;
         }
 
         .modal-actions {
@@ -640,12 +652,12 @@
             
             <div class="form-group">
                 <label class="form-label">Monto</label>
-                <input type="number" class="form-input" id="amountInput" placeholder="0.00" step="0.01">
+                <input type="number" class="form-input" id="amountInput" placeholder="0.00" step="0.01" inputmode="decimal">
             </div>
 
             <div class="form-group" id="categoryGroup">
                 <label class="form-label">Categoría</label>
-                <select class="form-select" id="categoryInput">
+                <select class="form-select" id="categoryInput" onmousedown="preventFocusJump(event)" ontouchstart="preventFocusJump(event)">
                 </select>
             </div>
 
@@ -656,7 +668,7 @@
 
             <div class="form-group">
                 <label class="form-label">Fecha</label>
-                <input type="date" class="form-input" id="dateInput">
+                <input type="date" class="form-input" id="dateInput" onmousedown="preventFocusJump(event)" ontouchstart="preventFocusJump(event)">
             </div>
 
             <div class="modal-actions">
@@ -840,6 +852,11 @@
         function getCategoryData(categoryName) {
             const categories = getAllCategories();
             return categories.find(c => c.name === categoryName) || defaultCategories[7];
+        }
+
+        function preventFocusJump(e) {
+            // Prevenir comportamiento extraño en móviles
+            e.stopPropagation();
         }
 
         function updateUI() {
