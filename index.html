@@ -677,12 +677,24 @@
                     const balance = calculateMonthBalance(monthKey);
                     
                     return `
-                        <div class="month-card" onclick="showMonthDetails('${monthKey}')">
+                        <div class="month-card">
                             <div class="month-card-header">
-                                <div class="month-name">${monthDisplay} ${isCurrent ? '(Actual)' : ''}</div>
-                                <div class="stat-value">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</div>
+                                <div class="month-name" onclick="showMonthDetails('${monthKey}')" style="cursor: pointer; flex: 1;">
+                                    ${monthDisplay} ${isCurrent ? '(Actual)' : ''}
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div class="stat-value">${balance >= 0 ? '+' : ''}${balance.toFixed(2)}</div>
+                                    ${!isCurrent ? `
+                                        <button class="action-btn delete" onclick="event.stopPropagation(); confirmDeleteMonth('${monthKey}', '${monthDisplay}')" title="Borrar este mes">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                                                <polyline points="3 6 5 6 21 6"/>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                            </svg>
+                                        </button>
+                                    ` : ''}
+                                </div>
                             </div>
-                            <div class="month-stats">
+                            <div class="month-stats" onclick="showMonthDetails('${monthKey}')" style="cursor: pointer;">
                                 <div class="stat-box">
                                     <div class="stat-label">Ingresos</div>
                                     <div class="stat-value income">${totalIncome.toFixed(2)}</div>
@@ -702,6 +714,28 @@
             }
 
             document.getElementById('historyModal').classList.add('active');
+        }
+
+        function confirmDeleteMonth(monthKey, monthDisplay) {
+            const confirmation = confirm(`¿Estás seguro de que quieres borrar todo el mes de ${monthDisplay}?\n\nEsta acción no se puede deshacer.`);
+            
+            if (confirmation) {
+                deleteMonth(monthKey);
+            }
+        }
+
+        function deleteMonth(monthKey) {
+            const currentMonth = getCurrentMonthKey();
+            
+            if (monthKey === currentMonth) {
+                alert('No puedes borrar el mes actual');
+                return;
+            }
+            
+            delete monthlyData[monthKey];
+            saveData();
+            updateUI();
+            showHistory();
         }
 
         function confirmDeleteAllHistory() {
