@@ -157,12 +157,20 @@
         <div class="modal">
             <div class="chart-header">
                 <h3 class="modal-title" style="margin: 0;">Historial de Meses</h3>
-                <button class="icon-btn" onclick="closeHistoryModal()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="icon-btn" onclick="confirmDeleteAllHistory()" title="Borrar todo el historial" style="background: #fef2f2;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" onclick="closeHistoryModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div id="historyContainer"></div>
         </div>
@@ -694,6 +702,35 @@
             }
 
             document.getElementById('historyModal').classList.add('active');
+        }
+
+        function confirmDeleteAllHistory() {
+            const confirmation = confirm('⚠️ ADVERTENCIA: Esto borrará TODO el historial de todos los meses.\n\n¿Estás completamente seguro?');
+            
+            if (confirmation) {
+                const doubleCheck = confirm('Esta acción NO se puede deshacer.\n\n¿Realmente quieres borrar todo el historial?');
+                
+                if (doubleCheck) {
+                    deleteAllHistory();
+                }
+            }
+        }
+
+        function deleteAllHistory() {
+            // Mantener solo el mes actual vacío
+            const currentMonth = getCurrentMonthKey();
+            monthlyData = {
+                [currentMonth]: {
+                    transactions: [],
+                    balance: 0
+                }
+            };
+    
+            saveData();
+            updateUI();
+            closeHistoryModal();
+            
+            alert('✓ Todo el historial ha sido borrado');
         }
 
         function closeHistoryModal() {
