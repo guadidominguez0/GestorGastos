@@ -192,6 +192,11 @@
                 </div>
                 
                 <div class="form-group">
+                    <label class="form-label">Icono</label>
+                    <div class="color-picker-grid" id="iconPicker"></div>
+                </div>
+                
+                <div class="form-group">
                     <label class="form-label">Color</label>
                     <div class="color-picker-grid" id="colorPicker"></div>
                 </div>
@@ -212,15 +217,26 @@
         let selectedColor = '#3b82f6';
 
         const defaultCategories = [
-            { name: 'Comida', color: '#f97316', icon: '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2m7 0v20M9 6h8m-8 6h8"/>' },
-            { name: 'Transporte', color: '#3b82f6', icon: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>' },
-            { name: 'Entretenimiento', color: '#a855f7', icon: '<rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="7 2 12 7 17 2"/>' },
-            { name: 'Salud', color: '#ef4444', icon: '<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/>' },
-            { name: 'Educación', color: '#22c55e', icon: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>' },
+            { name: 'Comida', color: '#f97316', icon: '<path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21"/>' },
+            { name: 'Transporte', color: '#22c55e', icon: '<path d="M4 6 2 7"/><path d="M10 6h4"/><path d="m22 7-2-1"/><rect width="16" height="16" x="4" y="3" rx="2"/><path d="M4 11h16"/><path d="M8 15h.01"/><path d="M16 15h.01"/><path d="M6 19v2"/><path d="M18 21v-2"/>' },
+            { name: 'Card SIM', color: '#3b82f6', icon: '<path d="M12 14v4"/><path d="M14.172 2a2 2 0 0 1 1.414.586l3.828 3.828A2 2 0 0 1 20 7.828V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M8 14h8"/><rect x="8" y="10" width="8" height="8" rx="1"/>' },
+            { name: 'Spotify', color: '#a855f7', icon: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>' },
             { name: 'Compras', color: '#ec4899', icon: '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>' },
-            { name: 'Servicios', color: '#eab308', icon: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>' },
-            { name: 'Otros', color: '#6b7280', icon: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>' }
+            { name: 'Servicios', color: '#eab308', icon: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>' }
         ];
+
+        const availableIcons = [
+            { name: 'Coffee', path: '<path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>' },
+            { name: 'Gift', path: '<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>' },
+            { name: 'Shirt', path: '<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>' },
+            { name: 'Wallet', path: '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>' },
+            { name: 'Heart', path: '<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/>' },
+            { name: 'Book', path: '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>' },
+            { name: 'Film', path: '<rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="7 2 12 7 17 2"/>' },
+            { name: 'Dots', path: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>' }
+        ];
+
+        let selectedIcon = availableIcons[0].path;
 
         const availableColors = [
             '#f97316', '#3b82f6', '#a855f7', '#ef4444', 
@@ -444,6 +460,22 @@
                 month.balance = calculateMonthBalance(monthKey);
                 saveData();
                 updateUI();
+            }
+        }
+
+        function editTransactionFromHistory(monthKey, id) {
+            editTransaction(monthKey, id);
+            closeHistoryModal();
+        }
+
+        function deleteTransactionFromHistory(monthKey, id) {
+            if (confirm('¿Estás seguro de que quieres eliminar esta transacción?')) {
+                const month = getMonthData(monthKey);
+                month.transactions = month.transactions.filter(t => t.id !== id);
+                month.balance = calculateMonthBalance(monthKey);
+                saveData();
+                updateUI();
+                showMonthDetails(monthKey);
             }
         }
 
@@ -744,13 +776,13 @@
                                 <div class="transaction-amount ${t.type}">
                                     ${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
                                 </div>
-                                <button class="action-btn" onclick="editTransaction('${monthKey}', ${t.id})">
+                                <button class="action-btn" onclick="editTransactionFromHistory('${monthKey}', ${t.id})">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                     </svg>
                                 </button>
-                                <button class="action-btn delete" onclick="deleteTransaction('${monthKey}', ${t.id})">
+                                <button class="action-btn delete" onclick="deleteTransactionFromHistory('${monthKey}', ${t.id})">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
                                         <polyline points="3 6 5 6 21 6"/>
                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -768,6 +800,7 @@
 
         function showCategories() {
             renderCategoriesList();
+            renderIconPicker();
             renderColorPicker();
             document.getElementById('categoriesModal').classList.add('active');
         }
@@ -820,6 +853,24 @@
             renderColorPicker();
         }
 
+        function renderIconPicker() {
+            const container = document.getElementById('iconPicker');
+            container.innerHTML = availableIcons.map(icon => `
+                <div class="color-option ${icon.path === selectedIcon ? 'selected' : ''}" 
+                    style="background: #f3f4f6; display: flex; align-items: center; justify-content: center;" 
+                    onclick="selectIcon('${icon.path.replace(/'/g, "\\'")}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" style="width: 24px; height: 24px;">
+                        ${icon.path}
+                    </svg>
+                </div>
+            `).join('');
+        }
+
+        function selectIcon(icon) {
+            selectedIcon = icon;
+            renderIconPicker();
+        }
+
         function addNewCategory() {
             const name = document.getElementById('newCategoryName').value.trim();
             
@@ -837,7 +888,7 @@
             const newCategory = {
                 name: name,
                 color: selectedColor,
-                icon: '<circle cx="12" cy="12" r="10"/>'
+                icon: selectedIcon
             };
 
             customCategories.push(newCategory);
@@ -847,6 +898,8 @@
             
             document.getElementById('newCategoryName').value = '';
             selectedColor = '#3b82f6';
+            selectedIcon = availableIcons[0].path;
+            renderIconPicker();
             renderColorPicker();
             
             alert('Categoría agregada exitosamente');

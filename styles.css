@@ -556,3 +556,36 @@ svg {
         height: 48px;
     }
 }
+
+.transaction-description {
+    font-size: 14px;
+    color: #6b7280;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    word-break: break-word;
+}
+
+@media (max-width: 640px) {
+    .transaction-card {
+        flex-wrap: wrap;
+    }
+
+    .transaction-actions {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .transaction-amount {
+        font-size: 20px;
+        flex: 1;
+        text-align: right;
+    }
+
+    .transaction-info {
+        max-width: calc(100% - 52px);
+    }
+}
