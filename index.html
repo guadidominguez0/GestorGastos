@@ -333,7 +333,18 @@
 
         function getCategoryData(categoryName) {
             const categories = getAllCategories();
-            return categories.find(c => c.name === categoryName) || defaultCategories[7];
+            const found = categories.find(c => c.name === categoryName);
+            
+            // Si no encuentra la categoría, devuelve una por defecto
+            if (!found) {
+                return {
+                    name: categoryName || 'Otro',
+                    color: '#6b7280',
+                    icon: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>'
+                };
+            }
+            
+            return found;
         }
 
         function preventFocusJump(e) {
